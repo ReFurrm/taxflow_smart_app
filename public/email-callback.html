@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Authentication - SmartBooks24</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 400px;
+    }
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .success {
+      color: #10b981;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    .error {
+      color: #ef4444;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="spinner"></div>
+    <p>Authenticating with email provider...</p>
+  </div>
+
+  <script>
+    // Parse URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    const error = urlParams.get('error');
+    
+    if (code) {
+      // Send code back to parent window
+      if (window.opener) {
+        window.opener.postMessage({
+          type: 'gmail-auth-success',
+          code: code
+        }, '*');
+        
+        // Update UI
+        document.querySelector('.container').innerHTML = `
+          <div class="success">✓</div>
+          <p class="success">Authentication successful!</p>
+          <p>You can close this window.</p>
+        `;
+        
+        // Close window after delay
+        setTimeout(() => {
+          window.close();
+        }, 2000);
+      }
+    } else if (error) {
+      // Handle error
+      document.querySelector('.container').innerHTML = `
+        <div class="error">✗</div>
+        <p class="error">Authentication failed</p>
+        <p>${error}</p>
+        <p>You can close this window.</p>
+      `;
+    }
+  </script>
+</body>
+</html>

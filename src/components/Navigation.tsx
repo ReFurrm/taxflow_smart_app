@@ -32,7 +32,7 @@ export default function Navigation() {
 
 
   const protectedLinks = [
-    { path: '/', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/efile', label: 'E-File', icon: Send },
     { path: '/entities', label: 'Business Entities', icon: Building2 },
     { path: '/audit-defense', label: 'Audit Defense', icon: Shield },

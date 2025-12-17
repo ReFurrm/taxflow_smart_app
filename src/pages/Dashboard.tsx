@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DashboardSection from '@/components/DashboardSection';
 import DocumentUpload from '@/components/DocumentUpload';
 import YearEndChecklist from '@/components/YearEndChecklist';
@@ -19,10 +19,15 @@ import { BankDashboard } from '@/components/BankDashboard';
 import { QuarterlyTaxSection } from '@/components/QuarterlyTaxSection';
 import { TaxAssistant } from '@/components/TaxAssistant';
 import { TaxProfessionalCollaboration } from '@/components/TaxProfessionalCollaboration';
+import OnboardingModal from '@/components/OnboardingModal';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/lib/supabase';
 
 
 
 export default function Dashboard() {
+  const { user } = useAuth();
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [documents, setDocuments] = useState([
     { id: 1, name: 'W-2 Form - ABC Corp', category: 'Tax Forms', date: 'Jan 15, 2024', amount: '', status: 'verified' as const, type: 'W-2' },
     { id: 2, name: '1099-NEC - Freelance Work', category: 'Tax Forms', date: 'Jan 20, 2024', amount: '', status: 'verified' as const, type: '1099' },
@@ -61,8 +66,34 @@ export default function Dashboard() {
     setDocuments([...documents, newDoc]);
   };
 
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      if (!user) return;
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('onboarding_completed')
+          .eq('id', user.id)
+          .single();
+
+        if (!error && !data?.onboarding_completed) {
+          setShowOnboarding(true);
+        }
+      } catch (err) {
+        console.error('Error checking onboarding status:', err);
+      }
+    };
+
+    checkOnboardingStatus();
+  }, [user]);
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <OnboardingModal 
+        isOpen={showOnboarding} 
+        onComplete={() => setShowOnboarding(false)} 
+      />
+
       {showReview && reviewDocuments.length > 0 && (
         <DocumentReview
           documents={reviewDocuments}

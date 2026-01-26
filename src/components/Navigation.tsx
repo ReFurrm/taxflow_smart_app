@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { 
   LayoutDashboard, Building2, Shield, Bitcoin, Receipt, 
-  CreditCard, User, LogOut, Menu, X, Send, Database 
+  CreditCard, User, LogOut, Menu, X, Send, Database, Activity 
 } from 'lucide-react';
 
 
@@ -42,6 +42,10 @@ export default function Navigation() {
     { path: '/subscriptions', label: 'Subscriptions', icon: CreditCard },
   ];
 
+  const devLinks = import.meta.env.DEV
+    ? [{ path: '/health', label: 'Health Check', icon: Activity }]
+    : [];
+
 
 
   return (
@@ -69,7 +73,7 @@ export default function Navigation() {
               </>
             ) : (
               <>
-                {protectedLinks.map(link => (
+                {[...protectedLinks, ...devLinks].map(link => (
                   <Link key={link.path} to={link.path} className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${isActive(link.path) ? 'bg-teal/10 text-teal' : 'text-charcoal hover:bg-teal/5'}`}>
                     <link.icon className="h-4 w-4" />
                     {link.label}
@@ -105,7 +109,7 @@ export default function Navigation() {
               </>
             ) : (
               <>
-                {protectedLinks.map(link => (
+                {[...protectedLinks, ...devLinks].map(link => (
                   <Link key={link.path} to={link.path} className={`flex items-center gap-2 px-3 py-2 rounded-md ${isActive(link.path) ? 'bg-blue-50 text-blue-600' : 'text-gray-700'}`} onClick={() => setMobileMenuOpen(false)}>
                     <link.icon className="h-4 w-4" />
                     {link.label}

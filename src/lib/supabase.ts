@@ -1,4 +1,8 @@
+import { createClient } from '@supabase/supabase-js';
 
-NEXT_PUBLIC_SUPABASE_URL=https://olignhedndrxjzlgjvtb.supabase.co
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=sb_publishable_kSY0gixZs5CXD9Nx6hWysA_6LE9xp7w
-SUPBASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9saWduaGVkbmRyeGp6bGdqdnRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxNDkxNDUsImV4cCI6MjA4NDcyNTE0NX0.cjznMszpsHOx8Fpxq1MocltWdqN5BguuExZmEV8g1z8
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+export { supabase };

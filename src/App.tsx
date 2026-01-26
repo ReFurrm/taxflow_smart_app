@@ -28,6 +28,7 @@ import Features from "./pages/Features";
 import BlogList from "./pages/BlogList";
 import BlogPost from "./pages/BlogPost";
 import Backups from "./pages/Backups";
+import HealthCheck from "./pages/HealthCheck";
 
 import Navigation from "./components/Navigation";
 
@@ -66,6 +67,7 @@ const App = () => (
               <Route path="/blog" element={<BlogList />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/backups" element={<ProtectedRoute><Backups /></ProtectedRoute>} />
+              <Route path="/health" element={<ProtectedRoute><HealthCheck /></ProtectedRoute>} />
 
 
 
@@ -81,4 +83,3 @@ const App = () => (
 );
 
 export default App;
-
